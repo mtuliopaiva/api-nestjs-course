@@ -6,5 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); //Importando os Pipes de maneira global - class validators
   await app.listen(3000);
+
+
 }
 bootstrap();

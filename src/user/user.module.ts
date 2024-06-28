@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { UserController } from "./user.controller";
+import { UserService } from "./user.service";
+import { PrismaModule } from "src/prisma/prisma.module";
 
     @Module({
-        imports: [],
+        imports: [PrismaModule],
         controllers: [UserController],
-        providers: [], //Classes que vão prove um serviço que tem o injetable
+        providers: [UserService], //Classes que vão prove um serviço que tem o injetable
         exports: []
     })
 export class UserModule {}
