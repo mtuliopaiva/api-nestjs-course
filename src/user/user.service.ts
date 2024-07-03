@@ -8,11 +8,15 @@ import { UpdatePatchUserDto } from './dto/update-patch-user.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async exists(id:number) {
-    if(!(await this.show(id))) {
-      throw new NotFoundException(
-        `O usuário ${id} não existe na aplicação.`
-      );
+  async exists(id: number) {
+    if (
+      !(await this.prisma.users.count({
+        where: {
+          id,
+        },
+      }))
+    ) {
+      throw new NotFoundException(`O usuário ${id} não existe na aplicação.`);
     }
   }
 
@@ -23,7 +27,6 @@ export class UserService {
         id: true,
         name: true,
         email: true,
-
       },
     });
   }
@@ -33,52 +36,50 @@ export class UserService {
   }
 
   async show(id: number) {
+    await this.exists(id);
     return await this.prisma.users.findUnique({
-        where:{
-            id
-        }
+      where: {
+        id,
+      },
     });
   }
 
-  async update(id:number, data:UpdateUserDto) {
+  async update(id: number, data: UpdateUserDto) {
     await this.exists(id);
 
     const updateData = {
       ...data,
-      birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : null
-    }
+      birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : null,
+    };
     return await this.prisma.users.update({
-      data:updateData,
-      where:{
-        id
-      }
+      data: updateData,
+      where: {
+        id,
+      },
     });
   }
 
-  async updatePartial(id:number, data:UpdatePatchUserDto) {
-
+  async updatePartial(id: number, data: UpdatePatchUserDto) {
     await this.exists(id);
     const updateData = {
       ...data,
-      birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : null
-    }
+      birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : null,
+    };
     return await this.prisma.users.update({
-      data:updateData,
-      where:{
-        id
-      }
+      data: updateData,
+      where: {
+        id,
+      },
     });
   }
 
-  async delete(id:number){
-
+  async delete(id: number) {
     await this.exists(id);
 
     return this.prisma.users.delete({
-      where:{
-        id
-      }
-    })
+      where: {
+        id,
+      },
+    });
   }
-  
 }

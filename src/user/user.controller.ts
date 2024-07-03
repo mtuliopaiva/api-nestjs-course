@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePatchUserDto } from './dto/update-patch-user.dto';
 import { UserService } from './user.service';
 import { LogInterceptor } from 'src/interceptors/log.interceptor';
+import { ParamId } from 'src/decorators/param-id.decorator';
 
 //Colocar o interceptor aqui faz em todo o controller. Se colocar em cada metodo fica somente la
 @UseInterceptors(LogInterceptor)
@@ -35,14 +36,14 @@ export class UserController {
 
   //oneUser
   @Get(':id')
-  async show(@Param('id', ParseIntPipe) id: number) {
+  async show(@ParamId() id: number) {
     return this.userService.show(id);
   }
 
   @Put(':id')
   async update(
     @Body() data: UpdateUserDto,
-    @Param('id', ParseIntPipe) id: number,
+    @ParamId() id: number,
   ) {
     return this.userService.update(id, data);
   }
@@ -50,13 +51,13 @@ export class UserController {
   @Patch(':id')
   async updatePartial(
     @Body() data: UpdatePatchUserDto,
-    @Param('id', ParseIntPipe) id: number,
+    @ParamId() id: number,
   ) {
     return this.userService.updatePartial(id, data);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@ParamId() id: number) {
     return this.userService.delete(id);
   }
 }
