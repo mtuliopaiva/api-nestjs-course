@@ -8,7 +8,7 @@ import { UserIdCheckMiddleware } from "src/middlewares/user-id-check.middleware"
         imports: [PrismaModule],
         controllers: [UserController],
         providers: [UserService], //Classes que vão prove um serviço que tem o injetable
-        exports: []
+        exports: [UserModule]
     })
 export class UserModule implements NestModule {
 
